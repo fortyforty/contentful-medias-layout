@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+    <title>Longform Medias Layout Widget</title>
+    <!--
+    Include styles from the Contentful app.
+
+    See http://contentful.github.io/ui-extensions-sdk/styleguide for information on
+    how to include and apply these styles.
+     -->
+    <link rel="stylesheet" href="https://contentful.github.io/ui-extensions-sdk/cf-extension.css">
+    <style>
+
+      body { margin: 0; }
+
+      .layout-selection {
+        padding: 10px 0;
+      }
+
+      .layout-selection label {
+        display: block;
+        margin-right: 20px;
+        margin-bottom: 20px;
+        cursor: pointer;
+        float: left;
+        width: 140px;
+      }
+
+
+      .layout-selection label input[type='radio'] {
+        display: none;
+      }
+
+      .layout-selection figure {
+        margin: 0;
+        padding: 0;
+        width: 140px;
+        height: 140px;
+        display: flex;
+        align-items: center;
+        align-content: center;
+        justify-content: center;
+        opacity: 0.25;
+        border: 1px solid rgb(105, 105, 105);
+      }
+
+      .layout-selection img {
+        height: auto;
+        width: 80px;
+      }
+
+      .layout-selection figcaption {
+        background: rgb(105, 105, 105);
+        color: #fff;
+        padding: 0 10px;
+        display: flex;
+        align-items: center;
+        align-content: center;
+        justify-content: center;
+        height: 60px;
+      }
+
+      .layout-selection label.is-active figure {
+        opacity: 1;
+      }
+
+      .layout-selection label.is-active figcaption {
+        background: rgb(0,0,0);
+      }
+
+      hr {
+        clear: both;
+        margin-top: 15px;
+      }
+      p {
+        clear: both;
+        margin-top: 15px;
+      }
+
+    </style>
+
+    <!--
+    Load the Extensions API that is used to communicate with the containing app.
+    -->
+    <script src="https://contentful.github.io/ui-extensions-sdk/cf-extension-api.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
+  </head>
+  <body>
+
+    <div class="layout-selection">
+      <label data-value="a">
+        <input type="radio" name="layout" value="a">
+        <figcaption>
+          a) window
+        </figcaption>
+      </label>
+      <label data-value="b">
+        <input type="radio" name="layout" value="b">
+        <figcaption>
+          b) cross
+        </figcaption>
+      </label>
+      <label data-value="c">
+        <input type="radio" name="layout" value="c">
+        <figcaption>
+          c) cross inverted
+        </figcaption>
+      </label>
+      <label data-value="d">
+        <input type="radio" name="layout" value="d">
+        <figcaption>
+          d) horizontal slices
+        </figcaption>
+      </label>
+    </div>
+
+    <script>
+
+      // This is the main entry point for extensions.
+      //
+      // The extension API reference explains in detail what you can do with
+      // the 'api' object.
+      var cfExt = window.contentfulExtension || window.contentfulWidget
+      cfExt.init(function (api) {
+
+        // Whenever the size of this document changes we adjust the size of
+        // the IFrame in the Contentful App.
+        api.window.startAutoResizer()
+
+        var metaData = api.entry.getSys()
+        var field = api.field;
+
+        // layout related field
+
+        // set initial value on field
+        setInitial(field.getValue())
+        function setInitial(value) {
+          let $current = $('label').filter('[data-value="' + value +'"]');
+          if ($current.get(0)) {
+            $current.addClass('is-active');
+          }
+        }
+
+        // When the user selects a different option from the dropdown
+        // we update the entry field
+        $('input:radio').on('change', function () {
+          field.setValue(this.value);
+          $(this).parent().addClass('is-active');
+          $(this).parent().siblings().removeClass('is-active');
+        })
+
+
+
+      })
+
+    </script>
+  </body>
+</html>

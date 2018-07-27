@@ -1,0 +1,7 @@
+
+{
+  "id": "contentful-longform-medias-layout",
+  "name": "Longform medias layout style",
+  "srcdoc": "./app.html",
+  "fieldTypes": ["Symbol"]
+}
